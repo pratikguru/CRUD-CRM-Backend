@@ -39,7 +39,7 @@ router.get("/get_service_request", authVerify, async (req, res) => {
   if (filteredUserInformation["userType"] === 1) {
     const serviceInformation = await ServiceRequest.find();
     return res.status(200).send({
-      message: "OK! Super user detected.",
+      message: "Returning Service List for User.",
       content: serviceInformation,
     });
   } else {
@@ -49,9 +49,9 @@ router.get("/get_service_request", authVerify, async (req, res) => {
     const serviceInformation = await ServiceRequest.find({
       contact_point_id: userInformation["_doc"]["_id"],
     });
-    console.log(serviceInformation);
+
     return res.status(200).send({
-      message: "OK! Normal user detected.",
+      message: "Returning Service List for Admin.",
       content: serviceInformation,
     });
   }

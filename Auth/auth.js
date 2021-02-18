@@ -48,9 +48,12 @@ router.post("/register", async (req, res) => {
 });
 
 router.post("/login", async (req, res) => {
+  console.log(req.body);
   const { error } = loginValidation(req.body);
+
   if (error) {
     res.status(400).send(error.details[0].message);
+    console.log(error.details);
   } else {
     //Checking if the user is in the db.
     const user = await User.findOne({
@@ -59,11 +62,14 @@ router.post("/login", async (req, res) => {
 
     if (user) {
       const validPass = await bcrypt.compare(req.body.password, user.password);
+
       if (validPass) {
         //Create and assign a token.
         const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET);
-        res.header("auth-token", token).send({ token: token });
-        //res.status(200).send({ ...user["_doc"], message: "OK" });
+        res
+          .status(200)
+          .header("auth-token", token)
+          .send({ token: token, message: "Login Successful!" });
       } else {
         res.status(400).send({ message: "Incorrect credentials." });
       }
