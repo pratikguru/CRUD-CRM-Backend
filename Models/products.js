@@ -5,6 +5,10 @@ const ProductScheme = new mongoose.Schema({
     type: String,
     required: true,
   },
+  product_id: {
+    type: String,
+    required: true,
+  },
 });
 
 module.exports = mongoose.model("Products", ProductScheme);
