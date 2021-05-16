@@ -13,6 +13,10 @@ const ClientSchema = new mongoose.Schema({
     type: Object,
     required: true,
   },
+  time: {
+    type: Date,
+    required: true,
+  },
 });
 
 module.exports = mongoose.model("Clients", ClientSchema);

@@ -27,7 +27,7 @@ router.get("/all_users", authVerify, async (req, res) => {
     }));
     console.log(usersInformation);
     if (usersInformation) {
-      res.status(200).send({ message: "OK", ...usersInformation });
+      res.status(200).send({ ...usersInformation });
     } else {
       res.status(400).send({ message: "User retrieval error." });
     }

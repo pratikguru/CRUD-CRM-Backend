@@ -20,18 +20,6 @@ const ServiceRequestSchema = new Mongoose.Schema({
     type: Number,
     required: true,
   },
-  client_email: {
-    type: String,
-    required: true,
-  },
-  client_address: {
-    type: String,
-    required: true,
-  },
-  product_category: {
-    type: String,
-    required: true,
-  },
   sub_client_name: {
     type: String,
     required: true,

@@ -46,6 +46,10 @@ const SubClientsSchema = new mongoose.Schema({
     type: Array,
     default: {},
   },
+  created_at: {
+    type: Date,
+    required: true,
+  },
 });
 
 module.exports = mongoose.model("SubClients", SubClientsSchema);

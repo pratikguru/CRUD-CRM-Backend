@@ -24,6 +24,37 @@ router.delete("/delete_service_request", authVerify, async (req, res) => {
   }
 });
 
+router.post("/get_specific_service_request", authVerify, async (req, res) => {
+  const userInformation = await User.findOne({
+    _id: req.user._id,
+  });
+  const { password, ...filteredUserInformation } = userInformation["_doc"];
+
+  if (filteredUserInformation["userType"] === 1) {
+    const serviceInformation = await ServiceRequest.find({
+      sub_client_id: req.body.sub_client_id,
+    });
+    return res.status(200).send({
+      message: "Returning Service List for User.",
+      content: serviceInformation,
+    });
+  } else {
+    const userInformation = await User.findOne({
+      _id: req.user._id,
+    });
+    const serviceInformation = await ServiceRequest.find({
+      //contact_point_id: userInformation["_doc"]["_id"],
+      sub_client_id: req.body.sub_client_id,
+    }).sort({ time_of_request: -1 });
+
+    console.log(serviceInformation);
+    return res.status(200).send({
+      message: "Returning Service List for Admin.",
+      content: serviceInformation,
+    });
+  }
+});
+
 router.get("/get_service_request", authVerify, async (req, res) => {
   /*
     Fetch service request has to be based on a few parameters. 
@@ -48,7 +79,7 @@ router.get("/get_service_request", authVerify, async (req, res) => {
     });
     const serviceInformation = await ServiceRequest.find({
       contact_point_id: userInformation["_doc"]["_id"],
-    });
+    }).sort({ time_of_request: -1 });
 
     return res.status(200).send({
       message: "Returning Service List for Admin.",
@@ -110,18 +141,16 @@ router.post("/update_service_request", authVerify, async (req, res) => {
 });
 
 router.post("/add_service_request", authVerify, async (req, res) => {
+  console.log("service", req.body);
   const { error } = serviceRequestValidation(req.body);
   if (error) {
-    return res.status(400).send(error.details);
+    return res.status(400).send(error);
   } else {
     let request = req.body;
     const service_request = new ServiceRequest({
       client_name: request.client_name,
       client_id: request.client_id,
       client_type: request.client_type,
-      client_email: request.client_email,
-      client_address: request.client_address,
-      product_category: request.product_category,
       sub_client_name: request.sub_client_name,
       sub_client_id: request.sub_client_id,
       docket_number: uniqueId(),
@@ -137,6 +166,7 @@ router.post("/add_service_request", authVerify, async (req, res) => {
       contact_point_phone_number: request.contact_point_phone_number,
       contact_point_email: request.contact_point_email,
       product_for_service: request.product_for_service,
+      time_of_request: new Date(),
     });
     try {
       const saved_service_request = await service_request.save();

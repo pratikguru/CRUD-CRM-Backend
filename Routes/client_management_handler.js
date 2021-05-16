@@ -16,7 +16,7 @@ router.post("/get_sub_clients", authVerify, async (req, res) => {
   try {
     const sub_clients = await SubClients.find({
       client_id: req.body.client_id,
-    });
+    }).sort({ created_at: -1 });
     res.status(200).send({ message: sub_clients });
   } catch (error) {
     res.status(400).send({ message: error });
@@ -25,7 +25,6 @@ router.post("/get_sub_clients", authVerify, async (req, res) => {
 
 router.post("/add_sub_client", authVerify, async (req, res) => {
   const { error } = registerNewSubClient(req.body);
-  console.log(error);
   if (error) {
     res.status(400).send({ message: error });
   } else {
@@ -50,6 +49,7 @@ router.post("/add_sub_client", authVerify, async (req, res) => {
         init: Date(),
       },
       products: req.body.products,
+      created_at: new Date(),
     });
 
     try {
@@ -92,6 +92,7 @@ router.post("/add_client", authVerify, async (req, res) => {
       client_id: uniqueId(),
       client_name: req.body.client_name,
       sub_clients: {},
+      time: new Date(),
     });
 
     try {
@@ -105,7 +106,7 @@ router.post("/add_client", authVerify, async (req, res) => {
 
 router.get("/get_clients", authVerify, async (req, res) => {
   try {
-    const clients = await Client.find();
+    const clients = await Client.find().sort({ time: -1 });
     res.status(200).send({ message: clients });
   } catch (error) {
     res.status(400).send({ message: clients });

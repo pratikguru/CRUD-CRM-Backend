@@ -29,12 +29,12 @@ const serviceRequestValidation = (body) => {
     client_name: Joi.string().required(),
     client_id: Joi.string().required(),
     client_type: Joi.number().required(),
-    client_email: Joi.string().required(),
-    client_address: Joi.string().required(),
-    product_category: Joi.string().required(),
+    //client_email: Joi.string().required(),
+    //client_address: Joi.string().required(),
+    //product_category: Joi.string().required(),
     sub_client_name: Joi.string().required(),
     sub_client_id: Joi.string().required(),
-    service_status: Joi.string().required(),
+    service_status: Joi.number().required(),
     //docket_number: Joi.string().required(),
     comments: Joi.string().required(),
     correspondent_first_name: Joi.string().required(),
@@ -46,7 +46,7 @@ const serviceRequestValidation = (body) => {
     contact_point_last_name: Joi.string().required(),
     contact_point_phone_number: Joi.string().required(),
     contact_point_email: Joi.string().required(),
-    product_for_service: Joi.object().required(),
+    product_for_service: Joi.string().required(),
   });
 
   return schema.validate(body);
